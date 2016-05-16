@@ -1,8 +1,9 @@
+-type ast() :: term().
 
 -record(form, {
                name :: string(),
                text :: binary(),
-               ast
+               ast :: ast()
               }).
 -type form() :: #form{}.
 
@@ -32,6 +33,7 @@
 
 -record(library, {
                   location,
+                  is_otp :: boolean(),
                   applications=[] :: [application()]
                  }).
 -type library() :: #library{}.
