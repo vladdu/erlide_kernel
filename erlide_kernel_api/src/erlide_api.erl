@@ -81,6 +81,7 @@ delete_form() ->
 update_form() ->
     ok.
 
+%% This includes documentation
 get_form_info() ->
     ok.
 
@@ -98,9 +99,6 @@ cancel_search_definitions() ->
 get_definitions() ->
     ok.
 
-search_definition() ->
-    ok.
-
 start_search_references() ->
     ok.
 
@@ -110,12 +108,24 @@ cancel_search_references() ->
 get_references() ->
     ok.
 
-get_call_stack() ->
+get_caller_tree() ->
     ok.
 
 complete_code() ->
     ok.
 
+
+
+%%% Refactorings
+
 rename() ->
     ok.
 
+move() ->
+    ok.
+
+extract_function() ->
+    ok.
+
+extract_macro() ->
+    ok.
