@@ -1,0 +1,14 @@
+language: java
+jdk:
+  - oraclejdk8
+script:
+  - ./build
+  - cd eclipse && ./build && cd ..
+deploy:
+  provider: releases
+  api_key: "TODO: GITHUB OAUTH TOKEN"
+  file_glob: true
+  file: "eclipse/org.erlide.kernel.site-*.zip"
+  skip_cleanup: true
+  on:
+    tags: true

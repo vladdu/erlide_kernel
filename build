@@ -2,21 +2,27 @@
 
 source ./build_utils.sh
 
-setup_otp() {
-    echo "Setup Erlang tools - the first time, this might take 30 minutes or more, as we need to build up to 4 Erlang runtimes..."
+#set -x
+
+setup_otp_travis() {
+    mkdir -p $HOME/erlide_tools
+
     if [ ! -e ~/erlide_tools/kerl ]; then
         curl -s 'https://raw.githubusercontent.com/kerl/kerl/master/kerl' > ~/erlide_tools/kerl
         chmod u+x ~/erlide_tools/kerl
     fi
-    ~/erlide_tools/kerl update releases > /dev/null
+
+    dest="otp"
+    mkdir -p $HOME/$dest
+    mkdir -p $HOME/.kerl
 
     for v in "${OTP_VSNS[@]}"; do
-        ~/erlide_tools/kerl build $v $v
-        if [ ! -e ~/erlide_tools/$v ]; then
-            ~/erlide_tools/kerl install $v ~/erlide_tools/$v
-        else
-            echo "OTP $v already installed"
-        fi
+        echo "install OTP $v..."
+        archive_url="https://s3.amazonaws.com/travis-otp-releases/binaries/ubuntu/14.04/x86_64/erlang-$v-nonroot.tar.bz2"
+        wget -o /dev/null -O $HOME/erlang-$v-nonroot.tar.bz2 ${archive_url}
+        tar -xf $HOME/erlang-$v-nonroot.tar.bz2 -C $HOME/$dest/
+        #echo "$v,$v" >> $HOME/.kerl/otp_builds
+        #echo "$v $HOME/$dest/$v" >> $HOME/.kerl/otp_installations
     done
 }
 
@@ -27,7 +33,8 @@ export REBAR_COLOR="low"
 main() {
     arg=${1:-compile}
 
-    setup_otp
+    setup_otp_travis
+
     find . -name build | xargs chmod u+x
 
     case "$arg" in
@@ -60,3 +67,4 @@ main() {
 }
 
 main "$@"
+
